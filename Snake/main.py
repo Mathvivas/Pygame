@@ -1,16 +1,59 @@
-# This is a sample Python script.
+# Programa criado com a aula do TechWithTim, no YouTube.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import math
+import random
+import pygame
+import tkinter as tk
+from tkinter import messagebox
 
+class Cube(object):
+    rows = 0
+    w = 0
+    def __init__(self, start, dirnx = 1, dirny = 0, color = (255, 0, 0)):
+        pass
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    def move(self, dirnx, dirny):
+        pass
 
+    def draw(self, surface, eyes = False):
+        pass
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+class Snake(object):
+    def __init__(self, color, pos):
+        pass
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    def move(self):
+        pass
+
+    def reset(self, pos):
+        pass
+
+    def addCube(self):
+        pass
+
+    def draw(self, surface):
+        pass
+
+def drawGrid(w, rows, surface):
+    pass
+
+def redrawWindow(surface):
+    pass
+
+def randomSnack(rows, items):
+    pass
+
+def message_box(subject, content):
+    pass
+
+def main():
+    pass
+
+rows =
+w =
+h =
+
+cube.rows = rows
+cube.w = w
+
+main()
