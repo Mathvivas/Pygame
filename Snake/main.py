@@ -3,6 +3,8 @@
 import math
 import random
 import pygame
+import tkinter as tk
+from tkinter import messagebox
 
 class Cube(object):
     rows = 20
@@ -88,7 +90,12 @@ class Snake(object):
                 else: c.move(c.dirnx, c.dirny)
 
     def reset(self, pos):
-        pass
+        self.head = Cube(pos)
+        self.body = []
+        self.body.append(self.head)
+        self.turns = {}
+        self.dirnx = 0
+        self.dirny = 1
 
     def addCube(self):
         tail = self.body[-1]
@@ -102,6 +109,9 @@ class Snake(object):
             self.body.append(Cube((tail.pos[0], tail.pos[1] - 1)))
         elif dx == 0 and dy == -1:
             self.body.append(Cube((tail.pos[0], tail.pos[1] + 1)))
+
+        self.body[-1].dirnx = dx
+        self.body[-1].dirny = dy
 
     def draw(self, surface):
         for i, c in enumerate(self.body):
@@ -124,9 +134,10 @@ def drawGrid(w, rows, surface):
         pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))  # Linha Horizontal
 
 def redrawWindow(surface):
-    global rows, width
+    global rows, width, s, snack
     surface.fill((0, 0, 0))
     s.draw(surface)
+    snack.draw(surface)
     drawGrid(width, rows, surface)
     pygame.display.update()
 
@@ -144,10 +155,17 @@ def randomSnack(rows, item):
     return (x, y)
 
 def message_box(subject, content):
-    pass
+    root = tk.Tk()
+    root.attributes("-topmost", True)
+    root.withdraw()
+    messagebox.showinfo(subject, content)
+    try:
+        root.destroy()
+    except:
+        pass
 
 def main():
-    global width, rows, s
+    global width, rows, s, snack
     width = 500
     rows = 20
     win = pygame.display.set_mode((width, width))
@@ -164,6 +182,13 @@ def main():
         if s.body[0].pos == snack.pos:
             s.addCube()
             snack = Cube(randomSnack(rows, s), color = (0, 255, 0))
+
+        for x in range(len(s.body)):
+            if s.body[x].pos in list(map(lambda z: z.pos, s.body[x + 1:])):
+                print('Score: ', len(s.body))
+                message_box('You Lost', 'Play Again...')
+                s.reset((10, 10))
+                break
 
         redrawWindow(win)
 
