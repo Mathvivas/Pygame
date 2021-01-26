@@ -91,7 +91,17 @@ class Snake(object):
         pass
 
     def addCube(self):
-        pass
+        tail = self.body[-1]
+        dx, dy = tail.dirnx, tail.dirny
+
+        if dx == 1 and dy == 0:
+            self.body.append(Cube((tail.pos[0] - 1, tail.pos[1])))
+        elif dx == -1 and dy == 0:
+            self.body.append(Cube((tail.pos[0] + 1, tail.pos[1])))
+        elif dx == 0 and dy == 1:
+            self.body.append(Cube((tail.pos[0], tail.pos[1] - 1)))
+        elif dx == 0 and dy == -1:
+            self.body.append(Cube((tail.pos[0], tail.pos[1] + 1)))
 
     def draw(self, surface):
         for i, c in enumerate(self.body):
@@ -120,8 +130,18 @@ def redrawWindow(surface):
     drawGrid(width, rows, surface)
     pygame.display.update()
 
-def randomSnack(rows, items):
-    pass
+def randomSnack(rows, item):
+    positions = item.body
+
+    while True:
+        x = random.randrange(rows)
+        y = random.randrange(rows)
+        if len(list(filter(lambda z: z.pos == (x, y), positions))) > 0:
+            continue
+        else:
+            break
+
+    return (x, y)
 
 def message_box(subject, content):
     pass
@@ -132,6 +152,7 @@ def main():
     rows = 20
     win = pygame.display.set_mode((width, width))
     s = Snake((255, 0, 0), (10, 10))
+    snack = Cube(randomSnack(rows, s), color = (0, 255, 0))
     flag = True
 
     clock = pygame.time.Clock()
@@ -140,6 +161,10 @@ def main():
         pygame.time.delay(50)
         clock.tick(10)
         s.move()
+        if s.body[0].pos == snack.pos:
+            s.addCube()
+            snack = Cube(randomSnack(rows, s), color = (0, 255, 0))
+
         redrawWindow(win)
 
     pass
