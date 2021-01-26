@@ -5,16 +5,32 @@ import random
 import pygame
 
 class Cube(object):
-    rows = 0
-    w = 0
+    rows = 20
+    w = 500
     def __init__(self, start, dirnx = 1, dirny = 0, color = (255, 0, 0)):
-        pass
+        self.pos = start
+        self.dirnx = 1
+        self.dirny = 0
+        self.color = color
 
     def move(self, dirnx, dirny):
-        pass
+        self.dirnx = dirnx
+        self.dirny = dirny
+        self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
     def draw(self, surface, eyes = False):
-        pass
+        dis = self.w // self.rows
+        i = self.pos[0]
+        j = self.pos[1]
+
+        pygame.draw.rect(surface, self.color, (i * dis + 1, j * dis + 1, dis - 2, dis - 2))
+        if eyes:
+            centre = dis // 2
+            radius = 3
+            circleMiddle = (i * dis + centre - radius, j * dis + 8)
+            circleMiddle2 = (i * dis + dis - radius * 2, j * dis + 8)
+            pygame.draw.circle(surface, (0, 0, 0), circleMiddle, radius)
+            pygame.draw.circle(surface, (0, 0, 0), circleMiddle2, radius)
 
 class Snake(object):
     body = []
@@ -66,7 +82,7 @@ class Snake(object):
 
             else:
                 if c.dirnx == -1 and c.pos[0] <= 0: c.pos = (c.rows - 1, c.pos[1])
-                elif c.dirnx == 1 and c.po[0] >= c.rows - 1: c.pos = (0, c.pos[1])
+                elif c.dirnx == 1 and c.pos[0] >= c.rows - 1: c.pos = (0, c.pos[1])
                 elif c.dirny == 1 and c.pos[1] >= c.rows - 1: c.pos = (c.pos[0], 0)
                 elif c.dirny == -1 and c.pos[1] <= 0: c.pos = (c.pos[0], c.rows - 1)
                 else: c.move(c.dirnx, c.dirny)
@@ -78,7 +94,11 @@ class Snake(object):
         pass
 
     def draw(self, surface):
-        pass
+        for i, c in enumerate(self.body):
+            if i == 0:
+                c.draw(surface, True)
+            else:
+                c.draw(surface)
 
 def drawGrid(w, rows, surface):
     sizeBtwn = w // rows
@@ -96,6 +116,7 @@ def drawGrid(w, rows, surface):
 def redrawWindow(surface):
     global rows, width
     surface.fill((0, 0, 0))
+    s.draw(surface)
     drawGrid(width, rows, surface)
     pygame.display.update()
 
@@ -106,7 +127,7 @@ def message_box(subject, content):
     pass
 
 def main():
-    global witdh, rows
+    global width, rows, s
     width = 500
     rows = 20
     win = pygame.display.set_mode((width, width))
@@ -118,7 +139,7 @@ def main():
     while flag:
         pygame.time.delay(50)
         clock.tick(10)
-
+        s.move()
         redrawWindow(win)
 
     pass
